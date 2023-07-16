@@ -1,0 +1,102 @@
+@import "./variables";
+
+html {
+  scroll-behavior: smooth;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+body {
+  font-family: $font-family;
+  color: $color-black;
+  line-height: 1.7;
+
+  ::selection {
+    background-color: $color-primary;
+    color: $color-white;
+  }
+
+  .container {
+    width: $container-width-lg;
+    margin: 0 auto;
+    @media screen and (max-width: $large-screen) {
+      width: $container-width-md;
+    }
+    @media screen and (max-width: $small-screen) {
+      width: $container-width-sm;
+    }
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    font-weight: 600;
+  }
+  h1 {
+    font-size: 2.5rem;
+  }
+  section {
+    margin-top: 8rem;
+    @media screen and (max-width: $large-screen) {
+      margin-top: 6rem;
+    }
+    @media screen and (max-width: $small-screen) {
+      margin-bottom: 2rem;
+    }
+    h3,
+    h5 {
+      text-align: center;
+      color: $color-primary-light;
+    }
+    h3 {
+      color: $color-primary;
+      margin-bottom: 3rem;
+      font-size: 2rem;
+    }
+  }
+
+  .text__secondary {
+    color: $color-primary-light;
+  }
+
+  a {
+    color: $color-primary;
+    transition: $transition;
+    text-decoration: none;
+  }
+
+  a:hover {
+    color: $color-white;
+  }
+
+  .btn {
+    width: max-content;
+    display: inline-block;
+    color: $color-black;
+    padding: 0.75rem 1.2rem;
+    border-radius: 0.4rem;
+    cursor: pointer;
+    border: 1px solid $color-primary;
+    transition: $transition;
+  }
+
+  .btn:hover {
+    background-color: $color-primary;
+    color: $color-white;
+    border-color: transparent;
+  }
+
+  .btn__primary {
+    background-color: $color-primary;
+    color: $color-white;
+  }
+
+  img {
+    display: block;
+    width: 100%;
+    object-fit: cover;
+  }
+}
