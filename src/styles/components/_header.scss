@@ -1,1 +1,24 @@
 @import "./../base/variables";
+.header__primary {
+  .container {
+    border-bottom: 1px solid $color-gray;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    .logo {
+      font-size: 1.3rem;
+      font-weight: 600;
+    }
+    .led__indicator {
+      width: 20px;
+      height: 20px;
+      background: radial-gradient(
+        circle,
+        $color-primary 0%,
+        $color-primary-light 100%
+      );
+      border-radius: 50%;
+    }
+  }
+}
