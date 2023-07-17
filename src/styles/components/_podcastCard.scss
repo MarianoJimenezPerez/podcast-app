@@ -1,0 +1,32 @@
+@import "./../base/variables";
+.podcast__card {
+  padding: 1rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  -webkit-box-shadow: 0px 7px 13px 4px rgba(0, 0, 0, 0.17);
+  -moz-box-shadow: 0px 7px 13px 4px rgba(0, 0, 0, 0.17);
+  box-shadow: 0px 7px 13px 4px rgba(0, 0, 0, 0.17);
+  .heading {
+    position: absolute;
+    top: -40%;
+    border-radius: 50%;
+    overflow: hidden;
+    right: 50%;
+    transform: translateX(50%);
+    width: 120px;
+  }
+  .description {
+    margin-top: 60px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    h3 {
+      text-transform: uppercase;
+    }
+    h5 {
+      color: $color-gray;
+    }
+  }
+}

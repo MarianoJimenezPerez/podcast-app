@@ -1,4 +1,5 @@
 import Header from "../components/Header";
+import PodcastsList from "../components/PodcastsList";
 import SearchBar from "../components/SearchBar";
 
 const Home = () => {
@@ -6,6 +7,7 @@ const Home = () => {
     <main>
       <Header />
       <SearchBar />
+      <PodcastsList />
     </main>
   );
 };

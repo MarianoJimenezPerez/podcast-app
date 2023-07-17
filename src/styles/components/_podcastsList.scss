@@ -1,0 +1,9 @@
+@import "./../base/variables";
+.podcasts__list {
+  .container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    row-gap: 90px;
+    column-gap: 30px;
+  }
+}
