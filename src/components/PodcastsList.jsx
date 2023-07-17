@@ -1,33 +1,9 @@
-import { useEffect, useState } from "react";
-import { makeRequest } from "./../utils/makeRequest.js";
+import React, { useContext } from "react";
+import { PodcastsContext } from "./../contexts/PodcastsContext";
 import PodcastCard from "./PodcastCard";
 
 const PodcastsList = () => {
-  const [podcasts, setPodcasts] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
-  const URL = "/toppodcasts/limit=100/json";
-
-  useEffect(() => {
-    setLoading(true);
-    makeRequest
-      .get(URL)
-      .then((response) => {
-        const data = response.data;
-        const podcastsData = data.feed.entry.map((entry) => ({
-          title: entry["im:name"].label,
-          author: entry["im:artist"].label,
-          image: entry["im:image"][0].label,
-        }));
-        setPodcasts(podcastsData);
-        setLoading(false);
-      })
-      .catch((error) => {
-        setError(true);
-        console.error(`Error al obtener los datos del feed: ${error.message}`);
-        setLoading(false);
-      });
-  }, []);
+  const { podcasts, loading, error } = useContext(PodcastsContext);
 
   return (
     <section className="podcasts__list">

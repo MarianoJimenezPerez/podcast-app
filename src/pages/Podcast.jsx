@@ -1,5 +1,12 @@
+import Header from "../components/Header";
+
 const Podcast = () => {
-  return <div>Podcast</div>;
+  return (
+    <>
+      <Header />
+      <main></main>
+    </>
+  );
 };
 
 export default Podcast;

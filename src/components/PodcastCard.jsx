@@ -1,15 +1,19 @@
+import { Link } from "react-router-dom";
+
 const PodcastCard = ({ podcast }) => {
-  const { author, image, title } = podcast;
+  const { id, author, image, title } = podcast;
   return (
-    <div className="podcast__card">
-      <div className="heading">
-        <img src={image} alt="Mujer" />
-      </div>
-      <div className="description">
-        <h3>{title}</h3>
-        <h5>Author: {author}</h5>
-      </div>
-    </div>
+    <Link className="podcast__card" to={`/podcast/${id}`}>
+      <article>
+        <div className="heading">
+          <img src={image} alt="Mujer" />
+        </div>
+        <div className="description">
+          <h3>{title}</h3>
+          <h5>Author: {author}</h5>
+        </div>
+      </article>
+    </Link>
   );
 };
 

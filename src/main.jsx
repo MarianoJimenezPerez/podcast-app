@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./styles/index.scss";
+import { PodcastsProvider } from "./contexts/PodcastsContext";
 import Home from "./pages/Home.jsx";
 import NotFound from "./pages/NotFound";
 import Podcast from "./pages/Podcast";
@@ -24,6 +25,8 @@ const App = () => {
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <App />
+    <PodcastsProvider>
+      <App />
+    </PodcastsProvider>
   </React.StrictMode>
 );
