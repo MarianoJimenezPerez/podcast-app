@@ -7,7 +7,7 @@ export const PodcastsProvider = ({ children }) => {
   const [podcasts, setPodcasts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const URL = "/toppodcasts/limit=100/json";
+  const URL = "/us/rss/toppodcasts/limit=100/json";
   const localStorageKey = "podcastsData";
   const localStorageTimestampKey = "podcastsDataTimestamp";
   const oneDayInMilliseconds = 24 * 60 * 60 * 1000;
@@ -30,6 +30,7 @@ export const PodcastsProvider = ({ children }) => {
     }
   }, []);
 
+
   const fetchPodcastsData = () => {
     makeRequest
       .get(URL)
@@ -45,7 +46,7 @@ export const PodcastsProvider = ({ children }) => {
         setLoading(false);
         setError(false);
 
-        // Data and timestamp save
+        // Podcasts data and timestamp save
         localStorage.setItem(localStorageKey, JSON.stringify(podcastsData));
         localStorage.setItem(localStorageTimestampKey, Date.now());
       })

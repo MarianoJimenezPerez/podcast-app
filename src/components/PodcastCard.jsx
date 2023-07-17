@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 const PodcastCard = ({ podcast }) => {
   const { id, author, image, title } = podcast;
   return (
-    <Link className="podcast__card" to={`/podcast/${id}`}>
+    <Link className="podcast__card shadow" to={`/podcast/${id}`}>
       <article>
         <div className="heading">
           <img src={image} alt="Mujer" />

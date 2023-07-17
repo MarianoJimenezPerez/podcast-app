@@ -45,8 +45,10 @@ body {
     }
   }
 
-  .text__secondary {
-    color: $color-primary-light;
+  .shadow {
+    -webkit-box-shadow: 0px 7px 13px 4px rgba(0, 0, 0, 0.17);
+    -moz-box-shadow: 0px 7px 13px 4px rgba(0, 0, 0, 0.17);
+    box-shadow: 0px 7px 13px 4px rgba(0, 0, 0, 0.17);
   }
 
   a {

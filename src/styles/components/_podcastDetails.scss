@@ -1,0 +1,76 @@
+@import "./../base/variables";
+.podcast__details {
+  display: flex;
+  gap: 10%;
+  padding: 0 2rem;
+  .sidebar {
+    width: 25%;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    img{
+        align-self: center;
+        padding: 20px 30px;
+    }
+    h2 {
+      border-top: 1px solid $color-gray;
+      padding-top: 20px;
+    }
+    h3 {
+      font-size: 16px;
+      font-weight: 400;
+    }
+    p {
+      border-top: 1px solid $color-gray;
+      padding-top: 20px;
+    }
+  }
+  .episodes__section {
+    width: 65%;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    h3 {
+      padding: 1rem;
+      border-radius: 5px;
+      font-size: 1.5rem;
+    }
+    div {
+      padding: 1rem;
+      border-radius: 5px;
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+        th,
+        td {
+          vertical-align: middle;
+          padding: 10px;
+        }
+        thead {
+          th:nth-child(1) {
+            width: 70%;
+          }
+
+          th:nth-child(2),
+          th:nth-child(3) {
+            width: 15%;
+          }
+        }
+        tbody {
+          tr {
+            vertical-align: middle;
+          }
+          tr:nth-child(odd) {
+            background-color: #f2f2f2; /* Fondo gris para filas impares */
+          }
+          tr:nth-child(even) {
+            background-color: $color-white; /* Fondo blanco para filas pares */
+          }
+        }
+      }
+    }
+  }
+}
