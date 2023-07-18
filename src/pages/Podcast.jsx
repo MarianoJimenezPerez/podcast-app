@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { makeRequest } from "../utils/makeRequest.js";
 import Header from "../components/Header";
-import parse from "xml-parser";
+import { formatDate } from "../utils/formatDate.js";
+import { Link } from "react-router-dom";
 
 const Podcast = () => {
   const { podcastId } = useParams();
@@ -49,33 +50,49 @@ const Podcast = () => {
         );
       });
   };
-
   const fetchPodcastEpisodes = async () => {
     try {
       const response = await fetch(podcastDetails.episodes);
       const feedData = await response.text();
-  
-      const parsedFeed = await parse(feedData);
-      console.log(parsedFeed)
-      const episodes = parsedFeed.root.children.filter((node) => node.name === "item");
-      const processedEpisodes = episodes.map((episode) => ({
-        title: episode.children.find((node) => node.name === "itunes:title").content,
-        releaseDate: episode.children.find((node) => node.name === "pubDate").content,
-        duration: episode.children.find((node) => node.name === "itunes:duration").content,
-      }));
-  
-      setPodcastDetails((prevDetails) => ({
-        ...prevDetails,
-        episodes: processedEpisodes,
-      }));
-      
-      console.log(processedEpisodes)
-      setHasEpisodes(true);
+
+      if (window.DOMParser) {
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(feedData, "text/xml");
+
+        const tags = xmlDoc.getElementsByTagName("item");
+
+        const processedEpisodes = [];
+
+        for (let i = 0; i < tags.length; i++) {
+          const item = tags[i];
+          const guid = item.getElementsByTagName("guid")[0].textContent;
+          const title = item.getElementsByTagName("title")[0].textContent;
+          const description =
+            item.getElementsByTagName("description")[0].textContent;
+          const pubDate = item.getElementsByTagName("pubDate")[0].textContent;
+          const duration =
+            item.getElementsByTagName("itunes:duration")[0].textContent;
+
+          processedEpisodes.push({
+            guid: guid,
+            title: title,
+            description: description,
+            pubDate: formatDate(pubDate),
+            duration: duration,
+          });
+        }
+
+        setPodcastDetails((prevDetails) => ({
+          ...prevDetails,
+          episodes: processedEpisodes,
+        }));
+
+        setHasEpisodes(true);
+      }
     } catch (error) {
       console.error("Error al obtener los episodios del podcast:", error);
     }
   };
-
   useEffect(() => {
     fetchPodcastDetails();
   }, [podcastId]);
@@ -98,14 +115,18 @@ const Podcast = () => {
           ) : podcastDetails ? (
             <>
               <div className="sidebar shadow">
-                <img src={podcastDetails.image} alt={podcastDetails.title} />
-                <h2>{podcastDetails.title}</h2>
-                <h3>
-                  by <i>{podcastDetails.author}</i>
-                </h3>
-                <p>
-                  <span>Description: </span> {podcastDetails.description}
-                </p>
+                <div>
+                  <img src={podcastDetails.image} alt={podcastDetails.title} />
+                </div>
+                <div>
+                  <h2>{podcastDetails.title}</h2>
+                  <h3>
+                    by <i>{podcastDetails.author}</i>
+                  </h3>
+                  <p>
+                    <span>Description: </span> {podcastDetails.description}
+                  </p>
+                </div>
               </div>
               <div className="episodes__section">
                 <h3 className="shadow">
@@ -123,13 +144,17 @@ const Podcast = () => {
                         </tr>
                       </thead>
                       <tbody>
-                       {/*  {podcastDetails.episodes.map((episode, index) => (
+                        {podcastDetails?.episodes?.map((episode, index) => (
                           <tr key={index}>
-                            <td>{episode.title}</td>
-                            <td>{episode.releaseDate}</td>
-                            <td>{episode.duration} ms</td>
+                            <td>
+                              <Link to={`./episode/${episode.guid}`}>
+                                {episode.title}
+                              </Link>
+                            </td>
+                            <td>{episode.pubDate}</td>
+                            <td>{episode.duration}</td>
                           </tr>
-                        ))} */}
+                        ))}
                       </tbody>
                     </table>
                   </div>
