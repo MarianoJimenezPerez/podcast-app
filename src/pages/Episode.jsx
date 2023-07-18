@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { makeRequest } from "../utils/makeRequest.js";
 import Header from "../components/Header";
-import { formatDate } from "../utils/formatDate.js";
 import { transformHtmlToText } from "../utils/transformHtmlToText.js";
+import { Link } from "react-router-dom";
 
 const Episode = () => {
   const { podcastId, episodeId } = useParams();
@@ -90,7 +90,7 @@ const Episode = () => {
           ...prevDetails,
           episodes: processedEpisodes,
         }));
-        setEpisodeFetched(true); // Set the flag to true after fetching episode data
+        setEpisodeFetched(true);
       }
     } catch (error) {
       console.error("Error al obtener los episodios del podcast:", error);
@@ -103,10 +103,8 @@ const Episode = () => {
 
   useEffect(() => {
     if (podcastDetails && podcastDetails.episodes && !episodeFetched) {
-      // Only run if episodes are available and not fetched yet
       fetchPodcastEpisode();
     }
-    console.log(podcastDetails);
   }, [podcastDetails, episodeFetched]);
 
   return (
@@ -121,12 +119,19 @@ const Episode = () => {
           ) : podcastDetails ? (
             <div className="sidebar shadow">
               <div>
-                <img src={podcastDetails.image} alt={podcastDetails.title} />
+                <Link to={`../`}>
+                  <img src={podcastDetails.image} alt={podcastDetails.title} />
+                </Link>
               </div>
               <div>
-                <h2>{podcastDetails.title}</h2>
+                <Link to={`../`}>
+                  <h2>{podcastDetails.title}</h2>
+                </Link>
                 <h3>
-                  by <i>{podcastDetails.author}</i>
+                  by{" "}
+                  <Link to={`../`} style={{ fontStyle: "italic" }}>
+                    {podcastDetails.author}
+                  </Link>
                 </h3>
                 <p>
                   <span>Description: </span> {podcastDetails.description}
@@ -139,7 +144,12 @@ const Episode = () => {
               <div className="shadow">
                 <h3>{podcastDetails.episodes[0].title}</h3>
                 <p>{podcastDetails.episodes[0].description}</p>
-                <audio controls autoPlay name="media" style={{width: "100%", marginTop: "1rem"}} >
+                <audio
+                  controls
+                  autoPlay
+                  name="media"
+                  style={{ width: "100%", marginTop: "1rem" }}
+                >
                   <source
                     src={podcastDetails.episodes[0].enclosure}
                     type="audio/mpeg"

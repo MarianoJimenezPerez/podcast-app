@@ -17,17 +17,21 @@
     height: max-content;
     @media screen and (max-width: $large-screen) {
       width: 100%;
-      flex-direction: row;
       margin-bottom: 2rem;
+    }
+    div{
+      overflow: scroll;
+      display: flex;
+      flex-direction: column;
     }
     img {
       align-self: center;
       padding: 20px 30px;
       @media screen and (max-width: $large-screen) {
         padding: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
+        object-fit: cover;
+        width: 150px;
+        align-self: center;
       }
     }
     h2 {

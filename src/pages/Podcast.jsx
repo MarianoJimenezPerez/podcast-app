@@ -4,11 +4,13 @@ import { makeRequest } from "../utils/makeRequest.js";
 import Header from "../components/Header";
 import { formatDate } from "../utils/formatDate.js";
 import { Link } from "react-router-dom";
+import { transformHtmlToText } from "../utils/transformHtmlToText.js";
 
 const Podcast = () => {
   const { podcastId } = useParams();
   const [podcastDetails, setPodcastDetails] = useState(null);
   const [hasEpisodes, setHasEpisodes] = useState(false);
+  const [hasPodcastDetails, setHasPodcastDetails] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
@@ -26,21 +28,61 @@ const Podcast = () => {
     return null;
   };
 
+  const checkLocalStorage = () => {
+    const storedPodcastDetails = localStorage.getItem(podcastId);
+    if (storedPodcastDetails) {
+      const parsedPodcastDetails = JSON.parse(storedPodcastDetails);
+      const timestamp = parsedPodcastDetails.timestamp;
+      const now = new Date().getTime();
+      const oneDayInMillis = 24 * 60 * 60 * 1000;
+
+      if (now - timestamp < oneDayInMillis) {
+        setPodcastDetails(parsedPodcastDetails);
+        setHasPodcastDetails(true);
+        setLoading(false);
+        return true;
+      }
+    }
+    return false;
+  };
+
   const fetchPodcastDetails = () => {
     makeRequest
       .get(URL)
-      .then((response) => {
+      .then(async (response) => {
         const data = response.data;
         const podcastDetailsData = {
           title: data.results[0].collectionName,
           author: data.results[0].artistName,
-          description: data.results[0].collectionDescription,
           image: getPodcastImage(),
           episodes: data.results[0].feedUrl,
+          timestamp: new Date().getTime(),
         };
+        try {
+          const res = await fetch(podcastDetailsData.episodes);
+          const feedData = await res.text();
+
+          if (window.DOMParser) {
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(feedData, "text/xml");
+
+            const desc = xmlDoc.getElementsByTagName("description");
+
+            console.log(desc);
+
+            podcastDetailsData.description = transformHtmlToText(
+              desc[0].textContent
+            );
+          }
+        } catch (error) {
+          console.error("Error al obtener los episodios del podcast:", error);
+        }
         setPodcastDetails(podcastDetailsData);
         setLoading(false);
         setError(false);
+        setHasPodcastDetails(true);
+
+        localStorage.setItem(podcastId, JSON.stringify(podcastDetailsData));
       })
       .catch((error) => {
         setError(true);
@@ -50,6 +92,7 @@ const Podcast = () => {
         );
       });
   };
+
   const fetchPodcastEpisodes = async () => {
     try {
       const response = await fetch(podcastDetails.episodes);
@@ -94,14 +137,15 @@ const Podcast = () => {
     }
   };
   useEffect(() => {
-    fetchPodcastDetails();
+    const storedPodcastDetails = checkLocalStorage();
+    if (!storedPodcastDetails) {
+      fetchPodcastDetails();
+    }
   }, [podcastId]);
 
   useEffect(() => {
-    if (podcastDetails && podcastDetails.episodes && !hasEpisodes) {
-      fetchPodcastEpisodes();
-    }
-  }, [podcastDetails, hasEpisodes]);
+    fetchPodcastEpisodes();
+  }, [hasPodcastDetails]);
 
   return (
     <>

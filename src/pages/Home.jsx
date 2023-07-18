@@ -1,6 +1,5 @@
 import Header from "../components/Header";
 import PodcastsList from "../components/PodcastsList";
-import SearchBar from "../components/SearchBar";
 
 const Home = () => {
   return (
@@ -8,7 +7,6 @@ const Home = () => {
       {" "}
       <Header />
       <main>
-        <SearchBar />
         <PodcastsList />
       </main>
     </>
