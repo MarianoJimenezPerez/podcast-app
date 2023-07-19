@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { makeRequest } from "../utils/makeRequest.js";
+import React from "react";
 import Header from "../components/Header";
-import { formatDate } from "../utils/formatDate.js";
+
+import { animated } from "@react-spring/web";
+import { bounceInLeft, bounceInRight } from "../utils/springAnimations";
+
 import { Link } from "react-router-dom";
-import { transformHtmlToText } from "../utils/transformHtmlToText.js";
 import usePodcastData from "../hooks/usePodcastData.jsx";
 
 const Podcast = () => {
-  const { podcastDetails, loading, error, hasPodcastDetails, hasEpisodes } =
-    usePodcastData();
+  const { podcastDetails, loading, error, hasEpisodes } = usePodcastData();
+
+  const sidebarAnim = bounceInLeft();
+  const episodesSectionAnim = bounceInRight();
 
   return (
     <>
@@ -22,7 +24,7 @@ const Podcast = () => {
             "Se produjo un error al cargar los datos."
           ) : podcastDetails ? (
             <>
-              <div className="sidebar shadow">
+              <animated.div className="sidebar shadow" style={sidebarAnim}>
                 <div>
                   <img src={podcastDetails.image} alt={podcastDetails.title} />
                 </div>
@@ -35,8 +37,11 @@ const Podcast = () => {
                     <span>Description: </span> {podcastDetails.description}
                   </p>
                 </div>
-              </div>
-              <div className="episodes__section">
+              </animated.div>
+              <animated.div
+                className="episodes__section"
+                style={episodesSectionAnim}
+              >
                 <h3 className="shadow">
                   Episodios:{" "}
                   {hasEpisodes ? podcastDetails.episodes.length : "Cargando..."}
@@ -67,7 +72,7 @@ const Podcast = () => {
                     </table>
                   </div>
                 )}
-              </div>
+              </animated.div>
             </>
           ) : null}
         </section>

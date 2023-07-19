@@ -1,4 +1,8 @@
 import React, { useState, useEffect } from "react";
+
+import { animated } from "@react-spring/web";
+import { bounceInLeft, bounceInRight } from "../utils/springAnimations";
+
 import Header from "../components/Header";
 import { transformHtmlToText } from "../utils/transformHtmlToText.js";
 import { Link, useParams } from "react-router-dom";
@@ -9,6 +13,9 @@ const Episode = () => {
   const [episodeDetails, setEpisodeDetails] = useState([]);
 
   const { episodeId } = useParams();
+
+  const sidebarAnim = bounceInLeft();
+  const episodesSectionAnim = bounceInRight();
 
   useEffect(() => {
     const fetchPodcastEpisode = async () => {
@@ -50,7 +57,6 @@ const Episode = () => {
       } catch (error) {
         console.error("Error al obtener los episodios del podcast:", error);
       }
-      console.log(episodeDetails);
     };
     fetchPodcastEpisode();
   }, [episodeId, podcastDetails]);
@@ -65,7 +71,7 @@ const Episode = () => {
           ) : error ? (
             "Se produjo un error al cargar los datos."
           ) : podcastDetails ? (
-            <div className="sidebar shadow">
+            <animated.div className="sidebar shadow" style={sidebarAnim}>
               <div>
                 <Link to={`../`}>
                   <img src={podcastDetails.image} alt={podcastDetails.title} />
@@ -85,10 +91,13 @@ const Episode = () => {
                   <span>Description: </span> {podcastDetails.description}
                 </p>
               </div>
-            </div>
+            </animated.div>
           ) : null}
           {episodeDetails.length > 0 ? (
-            <div className="episodes__section">
+            <animated.div
+              className="episodes__section"
+              style={episodesSectionAnim}
+            >
               <div className="shadow">
                 <h3>{episodeDetails[0].title}</h3>
                 <p>{episodeDetails[0].description}</p>
@@ -102,7 +111,7 @@ const Episode = () => {
                   Tu navegador no soporta la reproducción de audio.
                 </audio>
               </div>
-            </div>
+            </animated.div>
           ) : (
             <div>Error al cargar los episodios</div>
           )}
